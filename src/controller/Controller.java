@@ -13,10 +13,10 @@ public class Controller extends AbstractController {
 		// TODO Auto-generated method stub
 		switch (this.action) {
 		case "start":
-			this.model.recuit();
+			this.model.run();
 			break;
 		case "stop":
-			this.model.reset();
+			this.model.stop();
 			break;
 		default:
 			System.out.println("Error");

@@ -6,10 +6,11 @@ import observer.Observable;
 import observer.Observer;
 
 public abstract class AbstractModel implements Observable{
+	protected boolean isRunning = false;
 	private ArrayList<Observer> listObserver = new ArrayList<Observer>();
 	
-	public abstract void recuit();
-	public abstract void reset();
+	public abstract void run();
+	public abstract void stop();
 	
 	public void addObserver(Observer obs)
 	{
@@ -26,6 +27,14 @@ public abstract class AbstractModel implements Observable{
 		for (Observer obs : listObserver)
 		{
 			obs.update(str);
+		}
+	}
+	
+	protected void recuit()
+	{
+		while (isRunning)
+		{
+			
 		}
 	}
 }

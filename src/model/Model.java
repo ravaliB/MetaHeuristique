@@ -1,13 +1,15 @@
 package model;
 
 public class Model extends AbstractModel {
-	public void recuit()
+	public void run()
 	{
-	
+		this.isRunning = true;
+		recuit();
 	}
 	
-	public void reset()
+	public void stop()
 	{
-		
+		this.isRunning = false;
 	}
+	
 }

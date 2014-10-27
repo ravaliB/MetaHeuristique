@@ -1,11 +1,15 @@
 package controller;
 
+import java.awt.Point;
+import java.util.HashMap;
+
 import model.AbstractModel;
 
 public abstract class AbstractController {
 	protected AbstractModel model;
 	protected String action;
 	protected int temperature;
+	protected HashMap<Integer, Point> blocks;
 	
 	public AbstractController(AbstractModel model)
 	{
@@ -21,6 +25,11 @@ public abstract class AbstractController {
 	public void setTemperature(int temperature)
 	{
 		this.temperature = temperature;
+	}
+	
+	public void setHashBlock(HashMap<Integer, Point> hashBlocks)
+	{
+		this.blocks = hashBlocks;
 	}
 	
 	abstract void control();

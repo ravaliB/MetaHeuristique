@@ -12,6 +12,5 @@ public class Main {
 		
 		WinFrame win = new WinFrame(controller);
 		model.addObserver(win);
-				
 	}
 }
