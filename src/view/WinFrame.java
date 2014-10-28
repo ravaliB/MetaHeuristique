@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -19,19 +18,22 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import observer.Observer;
+import view.BlocksPanel.Block;
 import controller.AbstractController;
 
 public class WinFrame extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 	private AbstractController controller;
 	private HashMap<Integer, Point> hashBlocks = new HashMap<Integer, Point>();
+	// private Line line = new Line();
+	private BlocksPanel blocks;
 	private boolean isRunning = false;
 
 	public WinFrame(AbstractController controller) {
 		initComponent();
 		this.controller = controller;
 		this.setVisible(true);
-		}
+	}
 
 	public void update(String str) {
 
@@ -39,20 +41,41 @@ public class WinFrame extends JFrame implements Observer {
 
 	private void initComponent() {
 		this.setTitle("MetaHeuristic");
-		this.setSize(new Dimension(1000, 1000));
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 
 		// Panel pour les blocks
-		JPanel blocks = new JPanel();
-		blocks.setPreferredSize(new Dimension(300, 300));
-		blocks.setBorder(BorderFactory.createBevelBorder(NORMAL));
-		
-		for (int i = 0; i < 25; i++) {
-			Block block = new Block();
-			blocks.add(block);
-		}
+		blocks = new BlocksPanel();
+		// blocks.setPreferredSize(new Dimension(300, 300));
+		// blocks.setBorder(BorderFactory.createBevelBorder(NORMAL));
+
+		/*
+		 * Insets insets = blocks.getInsets(); Dimension size;
+		 * 
+		 * int x = 0, y = 0;
+		 * 
+		 * 
+		 * for (int i = 0; i < 25; i++) { Block block = new Block();
+		 * block.setId(i); blocks.add(block);
+		 * 
+		 * x++;
+		 * 
+		 * if (i % 5 == 0) { x = 0;
+		 * 
+		 * if (i != 0) y++; }
+		 * 
+		 * size = block.getPreferredSize(); block.setBounds(60 * x +
+		 * insets.left, 50 * y + insets.top, size.width, size.height);
+		 * 
+		 * }
+		 * 
+		 * 
+		 * line.setPreferredSize(new Dimension(300, 200));
+		 * 
+		 * 
+		 * blocks.add(line);
+		 */
 
 		// Panel pour la toolbox
 		JPanel toolBox = new JPanel();
@@ -90,22 +113,19 @@ public class WinFrame extends JFrame implements Observer {
 
 		JPanel container = new JPanel();
 		container.setPreferredSize(new Dimension(400, 400));
-		
+
 		container.add(sliderPanel, BorderLayout.NORTH);
 		container.add(blocks, BorderLayout.CENTER);
 		container.add(toolBox);
-		
-		this.setContentPane(container);
-		
-		this.pack();
-		int i = 0;
 
-		for (Component b : blocks.getComponents()) {
-			if (b instanceof Block) {
-				hashBlocks.put(i, ((Block) b).getLocation());
-				i++;
-			}
+		this.setContentPane(container);
+
+		this.pack();
+
+		for (Block b : blocks.getBlocks()) {
+			hashBlocks.put(b.id, new Point(b.x, b.y));
 		}
+
 	}
 
 	// ====================== class Listener ===========
@@ -114,6 +134,7 @@ public class WinFrame extends JFrame implements Observer {
 			if (!isRunning) {
 				// controller.setHashBlock(hashBlocks);
 				// controller.setAction(((JButton) e.getSource()).getText());
+				blocks.drawLine(hashBlocks.get(1), hashBlocks.get(7));
 				isRunning = true;
 			}
 		}
