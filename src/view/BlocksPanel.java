@@ -43,14 +43,11 @@ public class BlocksPanel extends JPanel {
 	{
 		lines.add(new Line2D.Double(pt1.x, pt1.y, pt2.x, pt2.y));
 		isDrawingLine = true;
-		repaint();
 	}
 	
 	public void clearLines()
 	{
 		lines.clear();
-	//	isDrawingLine = false;
-	//	repaint();
 	}
 	
 	public List<Block> getBlocks()

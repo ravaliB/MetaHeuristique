@@ -63,6 +63,8 @@ public class WinFrame extends JFrame implements Observer {
 			blocks.drawLine(src, linksMap.get(src));
 		}
 		
+		blocks.repaint();
+		
 		hashBlocks = map;
 		
 		this.temperature.setValue((int)temperature);
