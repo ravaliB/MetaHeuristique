@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,9 +27,9 @@ public class WinFrame extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 	private AbstractController controller;
 	private HashMap<Integer, Point> hashBlocks = new HashMap<Integer, Point>();
-	// private Line line = new Line();
 	private BlocksPanel blocks;
 	private boolean isRunning = false;
+	private JSlider temperature;
 
 	public WinFrame(AbstractController controller) {
 		initComponent();
@@ -35,8 +37,36 @@ public class WinFrame extends JFrame implements Observer {
 		this.setVisible(true);
 	}
 
-	public void update(String str) {
+	public void update(HashMap<Integer, Point> map, HashMap<Point, Point> linksMap, double temperature) {
+		Set<Integer> keys = map.keySet();
+		Set<Point> keysLinks = linksMap.keySet();
+		Iterator<Integer> it = keys.iterator();
+		Iterator<Point> itLink = keysLinks.iterator();
+		int i = 0;
+		
+		//mettre à jour les positions des blocks
+		while (it.hasNext())
+		{
+			Block block = blocks.getBlocks().get(i);
+			block.id = it.next();
+			block.x = map.get(block.id).x;
+			block.y = map.get(block.id).y;
+			i++;
+		}
 
+		blocks.clearLines();
+		
+		//mettre à jour le linkage
+		while (itLink.hasNext())
+		{
+			Point src = itLink.next();
+			blocks.drawLine(src, linksMap.get(src));
+		}
+		
+		hashBlocks = map;
+		
+		this.temperature.setValue((int)temperature);
+		this.temperature.revalidate();
 	}
 
 	private void initComponent() {
@@ -47,35 +77,6 @@ public class WinFrame extends JFrame implements Observer {
 
 		// Panel pour les blocks
 		blocks = new BlocksPanel();
-		// blocks.setPreferredSize(new Dimension(300, 300));
-		// blocks.setBorder(BorderFactory.createBevelBorder(NORMAL));
-
-		/*
-		 * Insets insets = blocks.getInsets(); Dimension size;
-		 * 
-		 * int x = 0, y = 0;
-		 * 
-		 * 
-		 * for (int i = 0; i < 25; i++) { Block block = new Block();
-		 * block.setId(i); blocks.add(block);
-		 * 
-		 * x++;
-		 * 
-		 * if (i % 5 == 0) { x = 0;
-		 * 
-		 * if (i != 0) y++; }
-		 * 
-		 * size = block.getPreferredSize(); block.setBounds(60 * x +
-		 * insets.left, 50 * y + insets.top, size.width, size.height);
-		 * 
-		 * }
-		 * 
-		 * 
-		 * line.setPreferredSize(new Dimension(300, 200));
-		 * 
-		 * 
-		 * blocks.add(line);
-		 */
 
 		// Panel pour la toolbox
 		JPanel toolBox = new JPanel();
@@ -96,7 +97,7 @@ public class WinFrame extends JFrame implements Observer {
 		JPanel sliderPanel = new JPanel();
 		JLabel sliderLabel = new JLabel("Temperature");
 
-		JSlider temperature = new JSlider(JSlider.HORIZONTAL, 0, 25, 25);
+		temperature = new JSlider(JSlider.HORIZONTAL, 0, 25, 25);
 
 		temperature.addChangeListener(new TemperatureListener());
 		temperature.setMajorTickSpacing(10);
@@ -125,16 +126,15 @@ public class WinFrame extends JFrame implements Observer {
 		for (Block b : blocks.getBlocks()) {
 			hashBlocks.put(b.id, new Point(b.x, b.y));
 		}
-
 	}
 
 	// ====================== class Listener ===========
 	class StartListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!isRunning) {
-				// controller.setHashBlock(hashBlocks);
-				// controller.setAction(((JButton) e.getSource()).getText());
-				blocks.drawLine(hashBlocks.get(1), hashBlocks.get(7));
+				controller.setHashBlock(hashBlocks);
+				controller.setTemperature(25);
+				controller.setAction(((JButton) e.getSource()).getText());
 				isRunning = true;
 			}
 		}
@@ -150,8 +150,8 @@ public class WinFrame extends JFrame implements Observer {
 	class TemperatureListener implements ChangeListener {
 		public void stateChanged(ChangeEvent e) {
 			JSlider source = (JSlider) e.getSource();
-			int temp = (int) source.getValue();
-
+			double temp = (double) source.getValue();
+			
 			controller.setTemperature(temp);
 		}
 	}

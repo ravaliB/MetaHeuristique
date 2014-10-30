@@ -7,10 +7,12 @@ import view.WinFrame;
 public class Main {
 
 	public static void main(String[] args) {
+
 		AbstractModel model = new Model();
 		AbstractController controller = new Controller(model);
-		
+
 		WinFrame win = new WinFrame(controller);
 		model.addObserver(win);
+
 	}
 }

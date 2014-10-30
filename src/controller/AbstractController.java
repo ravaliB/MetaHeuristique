@@ -8,8 +8,7 @@ import model.AbstractModel;
 public abstract class AbstractController {
 	protected AbstractModel model;
 	protected String action;
-	protected int temperature;
-	protected HashMap<Integer, Point> blocks;
+	protected double temperature;
 	
 	public AbstractController(AbstractModel model)
 	{
@@ -22,14 +21,14 @@ public abstract class AbstractController {
 		control();
 	}
 	
-	public void setTemperature(int temperature)
+	public void setTemperature(double temperature)
 	{
-		this.temperature = temperature;
+		model.setTemperature(temperature);
 	}
 	
 	public void setHashBlock(HashMap<Integer, Point> hashBlocks)
 	{
-		this.blocks = hashBlocks;
+		model.setHashMap(hashBlocks);
 	}
 	
 	abstract void control();

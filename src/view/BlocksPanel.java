@@ -46,6 +46,13 @@ public class BlocksPanel extends JPanel {
 		repaint();
 	}
 	
+	public void clearLines()
+	{
+		lines.clear();
+	//	isDrawingLine = false;
+	//	repaint();
+	}
+	
 	public List<Block> getBlocks()
 	{
 		return blocks;
